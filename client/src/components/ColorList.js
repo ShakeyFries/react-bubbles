@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const initialColor = {
@@ -21,10 +21,27 @@ const ColorList = ({ colors, updateColors }) => {
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
+    axios
+      .put(`http://localhost:5000/colors/${colors.id}, colors`)
+      .then(res => {
+        console.log(res);
+        updateColors(res.data);
+        colors.history.goBack();
+      })
+      .catch(err => {
+        console.error(err);
+      });
   };
 
   const deleteColor = color => {
     // make a delete request to delete this color
+    color.preventDefault();
+    axios
+      .delete(`http://localhost:5000/colors/${colors.id}`)
+      .then(res => {
+        updateColors(res.data);
+        colors.history.push("/protected")
+      })
   };
 
   return (
